@@ -22,8 +22,13 @@ public class AreaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Long id){
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
         return ResponseEntity.ok(areaService.getById(id));
+    }
+
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<?> getByName(@PathVariable("nome") String nome) {
+        return ResponseEntity.ok(areaService.getByName(nome));
     }
 
     @PostMapping
@@ -32,13 +37,13 @@ public class AreaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Area area, @PathVariable("id") Long id){
+    public ResponseEntity<?> update(@RequestBody Area area, @PathVariable("id") Long id) {
         Area aux = areaService.update(area, id);
-        return aux!=null ? ResponseEntity.ok(aux) : ResponseEntity.notFound().build();
+        return aux != null ? ResponseEntity.ok(aux) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id){
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         areaService.delete(id);
         return ResponseEntity.ok().build();
     }

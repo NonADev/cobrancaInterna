@@ -18,6 +18,10 @@ public class AreaService {
         return areaRepository.findAll();    //.stream().map(AreaDTO::create).collect(Collectors.toList()); //quando adicionar DTOs
     }
 
+    public List<Area> getByName(String nome){
+        return areaRepository.findByNomeLike("%"+nome+"%");
+    }
+
     public Optional<Area> getById(Long id) {
         return areaRepository.findById(id); //.orElseThrow(() -> new ObjectNotFoundException("Area not found")); // ! esse null e tratamento do elseThrow
     }
