@@ -36,57 +36,66 @@ public class CobrancaController {
     }
 
     @GetMapping("/aprovar/{id}")
-    public ResponseEntity<?> aprovarCobranca(@PathVariable("id") Integer id){
-        try{
+    public ResponseEntity<?> aprovarCobranca(@PathVariable("id") Integer id) {
+        try {
             cobrancaInternaService.aprovarCobranca(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/recusar/{id}")
-    public ResponseEntity<?> recusarCobranca(@PathVariable("id") Integer id){
-        try{
+    public ResponseEntity<?> recusarCobranca(@PathVariable("id") Integer id) {
+        try {
             cobrancaInternaService.recusarCobranca(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/get-cobrancadas-recebidas")
-    public ResponseEntity<?> getCobrancasRecebidas(@RequestParam("cobrancaId") Integer cobrancaId){
+    @GetMapping("/get-cobrancas")
+    public ResponseEntity<?> getCobrancas(@RequestParam("userId") Integer usuarioId) {
+        try{
+            return ResponseEntity.ok(cobrancaInternaService.listCobrancas(usuarioId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get-cobrancas-recebidas")
+    public ResponseEntity<?> getCobrancasRecebidas(@RequestParam("cobrancaId") Integer cobrancaId) {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancasRecebidas(cobrancaId));
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/area")
-    public ResponseEntity<?> getCobrancasByArea(@RequestParam("areaId") Integer area){
+    public ResponseEntity<?> getCobrancasByArea(@RequestParam("areaId") Integer area) {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancas(area));
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/get-cobrancadas-enviadas")
-    public ResponseEntity<?> getCobrancasEnviadas(@RequestParam("cobrancaId") Integer id){
-        try{
+    @GetMapping("/get-cobrancas-enviadas")
+    public ResponseEntity<?> getCobrancasEnviadas(@RequestParam("cobrancaId") Integer id) {
+        try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancasEnviadas(id));
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @GetMapping("/status/{id}")
-    public ResponseEntity<?> getByStatusId(@PathVariable("id") Integer id){
-        try{
+    public ResponseEntity<?> getByStatusId(@PathVariable("id") Integer id) {
+        try {
             return ResponseEntity.ok(cobrancaInternaService.listAllByStatus(id));
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -72,11 +72,18 @@ public class CobrancaService implements ICobrancaService {
     }
 
     public List<Cobranca> listCobrancas() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        System.out.println("===================================");
+        System.out.println(user.getAuthorities().contains("ROLE_ADMIN"));
+        System.out.println("===================================");
+
         return cobrancaInternaRepository.findAll();
     }
 
     public List<Cobranca> listCobrancas(Integer areaId) {
-        return cobrancaInternaRepository.findAllByPagadorAreaIdOrBeneficiarioAreaId(areaId);
+        return cobrancaInternaRepository.findAllByPagadorAreaIdOrBeneficiarioAreaId(areaId, areaId);
     }
 
     public List<Cobranca> listCobrancasEnviadas(Integer areaId) {
