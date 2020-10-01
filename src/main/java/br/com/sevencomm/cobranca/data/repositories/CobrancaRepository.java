@@ -8,5 +8,6 @@ import java.util.List;
 public interface CobrancaRepository extends JpaRepository<Cobranca, Integer> {
     List<Cobranca> findAllByPagadorAreaId(Integer id);
     List<Cobranca> findAllByBeneficiarioAreaId(Integer id);
+    List<Cobranca> findAllByPagadorAreaIdOrBeneficiarioAreaId(Integer id);
     List<Cobranca> findAllByStatusId(Integer id);
 }

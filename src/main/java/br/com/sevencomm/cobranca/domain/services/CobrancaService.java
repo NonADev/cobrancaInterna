@@ -27,7 +27,7 @@ public class CobrancaService implements ICobrancaService {
     @Autowired
     private StatusRepository statusRepository;
 
-    public Cobranca getCobranca(Integer cobrancaId) {
+    public Cobranca getCobrancaById(Integer cobrancaId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -41,28 +41,59 @@ public class CobrancaService implements ICobrancaService {
         return fndCobranca.get();
     }
 
+    public void aprovarCobranca(Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Optional<Cobranca> fndCobranca = cobrancaInternaRepository.findById(id);
+
+        if(!fndCobranca.isPresent()) throw new IllegalArgumentException("Cobranca not found");
+
+        if(!(fndCobranca.get().getBeneficiarioAreaId().equals(user.getAreaId()))) throw new IllegalArgumentException("User not allowed");
+
+        Cobranca cobranca = fndCobranca.get();
+        cobranca.setStatusId(2);
+        cobrancaInternaRepository.save(cobranca);
+    }
+
+    public void recusarCobranca(Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
+        Optional<Cobranca> fndCobranca = cobrancaInternaRepository.findById(id);
+
+        if(!fndCobranca.isPresent()) throw new IllegalArgumentException("Cobranca not found");
+
+        if(!(fndCobranca.get().getBeneficiarioAreaId().equals(user.getAreaId()))) throw new IllegalArgumentException("User not allowed");
+
+        Cobranca cobranca = fndCobranca.get();
+        cobranca.setStatusId(3);
+        cobrancaInternaRepository.save(cobranca);
+    }
+
     public List<Cobranca> listCobrancas() {
         return cobrancaInternaRepository.findAll();
     }
 
-    public List<Cobranca> listCobrancas(Integer statusId) {
-        return cobrancaInternaRepository.findAllByPagadorAreaId(statusId);
+    public List<Cobranca> listCobrancas(Integer areaId) {
+        return cobrancaInternaRepository.findAllByPagadorAreaIdOrBeneficiarioAreaId(areaId);
     }
 
-    public List<Cobranca> listCobrancasEnviadas(Integer statusId) {
-        return null;
+    public List<Cobranca> listCobrancasEnviadas(Integer areaId) {
+        return cobrancaInternaRepository.findAllByPagadorAreaId(areaId);
     }
 
-    public List<Cobranca> listCobrancasRecebidas(Integer statusId) {
-        return null;
+    public List<Cobranca> listCobrancasRecebidas(Integer areaId) {
+        return cobrancaInternaRepository.findAllByBeneficiarioAreaId(areaId);
     }
 
-    public Cobranca update(Cobranca cobrancaInterna, Integer id) {
+    public Cobranca updateCobranca(Cobranca cobrancaInterna, Integer id) {
         Optional<Cobranca> optAux = cobrancaInternaRepository.findById(id);
 
         if (optAux.isPresent()) {
             Cobranca ciAux = optAux.get();
 
+            ciAux.setStatusId(1); //caso o requisitor altere, o status volta pra 1
             ciAux.setBeneficiarioAreaId(cobrancaInterna.getBeneficiarioAreaId());
             ciAux.setPagadorAreaId(cobrancaInterna.getPagadorAreaId());
             ciAux.setDatahora(cobrancaInterna.getDatahora());
@@ -76,14 +107,6 @@ public class CobrancaService implements ICobrancaService {
         }
     }
 
-    public List<Cobranca> getAllByBeneficiarioAreaId(Integer id){
-        return cobrancaInternaRepository.findAllByBeneficiarioAreaId(id);
-    }
-
-    public List<Cobranca> getAllByStatusId(Integer id){
-        return cobrancaInternaRepository.findAllByStatusId(id);
-    }
-
     public void deleteCobranca(Integer id) {
         cobrancaInternaRepository.deleteById(id);
     }
@@ -94,10 +117,15 @@ public class CobrancaService implements ICobrancaService {
                 && userRepository.findById(cobrancaInterna.getPagadorAreaId()).isPresent()
                 && userRepository.findById(cobrancaInterna.getBeneficiarioAreaId()).isPresent()){
             Assert.isNull(cobrancaInterna.getId(), "Não foi possivel inserir registro");
+            cobrancaInterna.setStatusId(1);
             return cobrancaInternaRepository.save(cobrancaInterna);
         }
         else{
             throw new IllegalArgumentException();
         }
+    }
+
+    public List<Cobranca> listAllByStatus(Integer status) {
+        return cobrancaInternaRepository.findAllByStatusId(status);
     }
 }

@@ -29,8 +29,28 @@ public class CobrancaController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getCobrancaById(@PathVariable("id") Integer id) {
         try {
-            return ResponseEntity.ok(cobrancaInternaService.getCobranca(id));
+            return ResponseEntity.ok(cobrancaInternaService.getCobrancaById(id));
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/aprovar/{id}")
+    public ResponseEntity<?> aprovarCobranca(@PathVariable("id") Integer id){
+        try{
+            cobrancaInternaService.aprovarCobranca(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/recusar/{id}")
+    public ResponseEntity<?> recusarCobranca(@PathVariable("id") Integer id){
+        try{
+            cobrancaInternaService.recusarCobranca(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -38,30 +58,37 @@ public class CobrancaController {
     @GetMapping("/get-cobrancadas-recebidas")
     public ResponseEntity<?> getCobrancasRecebidas(@RequestParam("cobrancaId") Integer cobrancaId){
         try {
-            return ResponseEntity.ok(cobrancaInternaService.listCobrancas(cobrancaId));
+            return ResponseEntity.ok(cobrancaInternaService.listCobrancasRecebidas(cobrancaId));
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/beneficiario/{id}")
-    public ResponseEntity<?> getCobrancasEnviadas(@PathVariable("id") Integer id){
-        try{
-            //return ResponseEntity.ok(cobrancaInternaService.getAllByBeneficiarioAreaId(id));
+    @GetMapping("/area")
+    public ResponseEntity<?> getCobrancasByArea(@RequestParam("areaId") Integer area){
+        try {
+            return ResponseEntity.ok(cobrancaInternaService.listCobrancas(area));
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return null;
+    }
+
+    @GetMapping("/get-cobrancadas-enviadas")
+    public ResponseEntity<?> getCobrancasEnviadas(@RequestParam("cobrancaId") Integer id){
+        try{
+            return ResponseEntity.ok(cobrancaInternaService.listCobrancasEnviadas(id));
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/status/{id}")
     public ResponseEntity<?> getByStatusId(@PathVariable("id") Integer id){
         try{
-            //return ResponseEntity.ok(cobrancaInternaService.getAllByStatusId(id));
+            return ResponseEntity.ok(cobrancaInternaService.listAllByStatus(id));
         } catch (Exception e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return null;
     }
 
     @PostMapping
@@ -76,12 +103,11 @@ public class CobrancaController {
     @PutMapping("/{id}")
     public ResponseEntity<?> put(@RequestBody Cobranca cobrancaInterna, @PathVariable("id") Integer id) {
         try {
-            //Cobranca aux = cobrancaInternaService.update(cobrancaInterna, id);
-            //return ResponseEntity.ok(aux);
+            Cobranca aux = cobrancaInternaService.updateCobranca(cobrancaInterna, id);
+            return ResponseEntity.ok(aux);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return null;
     }
 
     @DeleteMapping("/{id}")

@@ -5,11 +5,18 @@ import br.com.sevencomm.cobranca.domain.models.Cobranca;
 import java.util.List;
 
 public interface ICobrancaService {
-    Cobranca getCobranca(Integer cobrancaId);
-    List<Cobranca> listCobrancas();
-    List<Cobranca> listCobrancas(Integer statusId );
     void deleteCobranca(Integer id);
+
+    void aprovarCobranca(Integer id);
+    void recusarCobranca(Integer id);
+
+    Cobranca getCobrancaById(Integer cobrancaId);
     Cobranca insertCobranca(Cobranca cobrancaInterna);
-    List<Cobranca> listCobrancasEnviadas(Integer statusId);
-    List<Cobranca> listCobrancasRecebidas(Integer statusId);
+    Cobranca updateCobranca(Cobranca cobrancaInterna, Integer id);
+
+    List<Cobranca> listCobrancas();
+    List<Cobranca> listCobrancas(Integer areaId);
+    List<Cobranca> listAllByStatus(Integer status);
+    List<Cobranca> listCobrancasEnviadas(Integer statusId); //pagador
+    List<Cobranca> listCobrancasRecebidas(Integer statusId); //recebeneficiario
 }
