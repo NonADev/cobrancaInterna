@@ -19,14 +19,15 @@ import java.util.Optional;
 @Service
 public class CobrancaService implements ICobrancaService {
 
-    @Autowired
+    private UserRepository userRepository;
+    private StatusRepository statusRepository;
     private CobrancaRepository cobrancaInternaRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private StatusRepository statusRepository;
+    public CobrancaService(CobrancaRepository cobrancaInternaRepository,UserRepository userRepository,StatusRepository statusRepository){
+        this.cobrancaInternaRepository = cobrancaInternaRepository;
+        this.userRepository = userRepository;
+        this.statusRepository = statusRepository;
+    }
 
     public Cobranca getCobrancaById(Integer cobrancaId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

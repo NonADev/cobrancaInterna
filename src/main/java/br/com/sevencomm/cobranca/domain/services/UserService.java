@@ -21,11 +21,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements IUserService {
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private AreaRepository areaRepository;
+
+    public UserService(UserRepository userRepository,AreaRepository areaRepository){
+        this.userRepository = userRepository;
+        this.areaRepository = areaRepository;
+    }
 
     public UserDTO getUserById(Integer id) {
         return userRepository.findById(id).map(UserDTO::create).orElseThrow(() -> new ObjectNotFoundException("User not found"));
@@ -71,5 +74,4 @@ public class UserService implements IUserService {
     public List<UserDTO> listUsers() {
         return userRepository.findAll().stream().map(UserDTO::create).collect(Collectors.toList());
     }
-
 }

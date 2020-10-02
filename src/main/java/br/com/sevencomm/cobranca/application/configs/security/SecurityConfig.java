@@ -4,6 +4,7 @@ import br.com.sevencomm.cobranca.application.configs.security.jwt.JwtAuthenticat
 import br.com.sevencomm.cobranca.application.configs.security.jwt.JwtAuthorizationFilter;
 import br.com.sevencomm.cobranca.application.configs.security.jwt.handler.AccessDeniedHandler;
 import br.com.sevencomm.cobranca.application.configs.security.jwt.handler.UnauthorizedHandler;
+import br.com.sevencomm.cobranca.domain.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .addFilter(new JwtAuthenticationFilter(authManager))
-                .addFilter(new JwtAuthorizationFilter(authManager, userDetailsService))
+                //.addFilter(new JwtAuthorizationFilter(authManager, userDetailsService))//roles
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler)
                 .authenticationEntryPoint(unauthorizedHandler)

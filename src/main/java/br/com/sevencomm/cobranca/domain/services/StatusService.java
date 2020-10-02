@@ -15,8 +15,11 @@ import java.util.Optional;
 @Service
 public class StatusService implements IStatusService {
 
-    @Autowired
     private StatusRepository statusRepository;
+
+    public StatusService(StatusRepository statusRepository){
+        this.statusRepository = statusRepository;
+    }
 
     public List<Status> listAll() {
         return statusRepository.findAll();    //.stream().map(StatusDTO::create).collect(Collectors.toList()); //quando adicionar DTOs

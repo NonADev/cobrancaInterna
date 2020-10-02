@@ -15,11 +15,11 @@ import java.util.Optional;
 @Service
 public class AreaService implements IAreaService {
 
-    @Autowired
     private AreaRepository areaRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public AreaService(AreaRepository areaRepository){
+        this.areaRepository =  areaRepository;
+    }
 
     public List<Area> listAreas() {
         return areaRepository.findAll();    //.stream().map(AreaDTO::create).collect(Collectors.toList()); //quando adicionar DTOs
