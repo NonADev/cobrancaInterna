@@ -22,7 +22,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancas());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -31,7 +31,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.getCobrancaById(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -41,7 +41,7 @@ public class CobrancaController {
             cobrancaInternaService.aprovarCobranca(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -51,7 +51,7 @@ public class CobrancaController {
             cobrancaInternaService.recusarCobranca(id);
             return ResponseEntity.noContent().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -60,7 +60,7 @@ public class CobrancaController {
         try{
             return ResponseEntity.ok(cobrancaInternaService.listCobrancas(usuarioId));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -69,7 +69,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancasRecebidas(cobrancaId));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -78,7 +78,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancas(area));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -87,7 +87,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listCobrancasEnviadas(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -96,7 +96,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.ok(cobrancaInternaService.listAllByStatus(id));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -105,7 +105,7 @@ public class CobrancaController {
         try {
             return ResponseEntity.created(getURI(cobrancaInternaService.insertCobranca(cobrancaInterna).getId())).build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -115,7 +115,7 @@ public class CobrancaController {
             Cobranca aux = cobrancaInternaService.updateCobranca(cobrancaInterna, id);
             return ResponseEntity.ok(aux);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
@@ -125,12 +125,20 @@ public class CobrancaController {
             cobrancaInternaService.deleteCobranca(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     private URI getURI(Integer id) {
         return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(id).toUri();
+    }
+
+    private static class Error {
+        public String error;
+
+        public Error(String error) {
+            this.error = error;
+        }
     }
 }

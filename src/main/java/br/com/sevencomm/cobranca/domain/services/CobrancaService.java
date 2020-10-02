@@ -1,5 +1,6 @@
 package br.com.sevencomm.cobranca.domain.services;
 
+import br.com.sevencomm.cobranca.application.configs.exception.ObjectNotFoundException;
 import br.com.sevencomm.cobranca.domain.interfaces.ICobrancaService;
 import br.com.sevencomm.cobranca.domain.models.Cobranca;
 import br.com.sevencomm.cobranca.data.repositories.CobrancaRepository;
@@ -33,7 +34,7 @@ public class CobrancaService implements ICobrancaService {
 
         Optional<Cobranca> fndCobranca = cobrancaInternaRepository.findById(cobrancaId);
 
-        if (!fndCobranca.isPresent()) throw new IllegalArgumentException("Cobranca not found");
+        if (!fndCobranca.isPresent()) throw new ObjectNotFoundException("Cobranca not found");
 
         if (!(fndCobranca.get().getBeneficiarioAreaId().equals(user.getAreaId())) && !(fndCobranca.get().getPagadorAreaId().equals(user.getAreaId())))
             throw new IllegalArgumentException("User not allowed");
@@ -74,10 +75,6 @@ public class CobrancaService implements ICobrancaService {
     public List<Cobranca> listCobrancas() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-
-        System.out.println("===================================");
-        System.out.println(user.getAuthorities().contains("ROLE_ADMIN"));
-        System.out.println("===================================");
 
         return cobrancaInternaRepository.findAll();
     }

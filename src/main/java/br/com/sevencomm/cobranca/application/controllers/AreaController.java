@@ -1,5 +1,6 @@
 package br.com.sevencomm.cobranca.application.controllers;
 
+import br.com.sevencomm.cobranca.domain.interfaces.IAreaService;
 import br.com.sevencomm.cobranca.domain.models.Area;
 import br.com.sevencomm.cobranca.domain.services.AreaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,66 +15,74 @@ import java.net.URI;
 public class AreaController {
 
     @Autowired
-    private AreaService areaService;
+    private IAreaService areaService;
 
     @GetMapping
-    public ResponseEntity<?> get() {
+    public ResponseEntity<?> getAllAreas() {
         try {
-            return ResponseEntity.ok(areaService.getAll());
+            return ResponseEntity.ok(areaService.listAreas());
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getById(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getAreaById(@PathVariable("id") Integer id) {
         try {
-            return ResponseEntity.ok(areaService.getById(id));
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return ResponseEntity.ok(areaService.getAreaById(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<?> getByName(@PathVariable("nome") String nome) {
+    public ResponseEntity<?> getAreasByName(@PathVariable("nome") String nome) {
         try {
-            return ResponseEntity.ok(areaService.getByName(nome));
+            return ResponseEntity.ok(areaService.listAreasByName(nome));
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> post(@RequestBody Area area) {
+    public ResponseEntity<?> createArea(@RequestBody Area area) {
         try {
-            return ResponseEntity.created(getURI(areaService.insert(area).getId())).build();
+            return ResponseEntity.created(getURI(areaService.insertArea(area).getId())).build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@RequestBody Area area, @PathVariable("id") Integer id) {
+    public ResponseEntity<?> updateArea(@RequestBody Area area, @PathVariable("id") Integer id) {
         try {
-            Area aux = areaService.update(area, id);
+            Area aux = areaService.updateArea(area, id);
             return aux != null ? ResponseEntity.ok(aux) : ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> deleteArea(@PathVariable("id") Integer id) {
         try {
-            areaService.delete(id);
+            areaService.deleteArea(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(new Error(e.getMessage()));
         }
     }
 
     private URI getURI(Integer id) {
         return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(id).toUri();
+    }
+
+    private static class Error {
+        public String error;
+
+        public Error(String error) {
+            this.error = error;
+        }
     }
 }

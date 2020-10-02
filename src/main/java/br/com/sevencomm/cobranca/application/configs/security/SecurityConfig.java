@@ -40,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/rest-api/v1/login").permitAll()
+                //.antMatchers(HttpMethod.GET, "/rest-api/v1/login").permitAll()
+                .antMatchers( "/rest-api/v1/users/sign-up").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()

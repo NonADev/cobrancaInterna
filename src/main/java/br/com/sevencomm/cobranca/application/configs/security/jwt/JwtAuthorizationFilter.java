@@ -25,7 +25,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private UserDetailsService userDetailsService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager,UserDetailsService userDetailsService) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
         super(authenticationManager);
         this.userDetailsService = userDetailsService;
     }
@@ -44,7 +44,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
 
-            if(! JwtUtil.isTokenValid(token)) {
+            if (!JwtUtil.isTokenValid(token)) {
                 throw new AccessDeniedException("Acesso negado.");
             }
 
@@ -63,7 +63,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             filterChain.doFilter(request, response);
 
         } catch (RuntimeException ex) {
-            logger.error("Authentication error: " + ex.getMessage(),ex);
+            logger.error("Authentication error: " + ex.getMessage(), ex);
 
             throw ex;
         }

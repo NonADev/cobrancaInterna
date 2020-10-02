@@ -1,5 +1,6 @@
 package br.com.sevencomm.cobranca.domain.models;
 
+import com.sun.istack.NotNull;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,9 +23,18 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles;
 
+    @NotNull
     private Integer areaId;
+
+    @NotNull
     private String login; // <-- username
+
+    @NotNull
     private String password;
+
+    @NotNull
+    private String email;
+
     private String nomeCompleto;
 
     @Override

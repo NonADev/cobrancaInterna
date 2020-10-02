@@ -26,9 +26,9 @@ public class SwaggerConfig { // URL: http://localhost:8080/swagger-ui.html
 
     private ApiInfo apiInfo(){
         return new ApiInfoBuilder()
-                .contact(new Contact("Wesley Lima", "", ""))
-                .title("Pokedex")
-                .description("Documentação API da Pokedex")
+                .contact(new Contact("Wesley Lima", "", "wesley.lima@7comm.com.br"))
+                .title("Cobrança Interna")
+                .description("Documentação API de Cobrança Interna")
                 .license("Free USE ERM")
                 .version("1.0")
                 .build();
